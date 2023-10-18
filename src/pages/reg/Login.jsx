@@ -32,17 +32,63 @@ function Login() {
       });
       window.location.href = "/";
       setloading(false);
-    } catch (error) {
-      toast.error("Sigin Failed", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
+    } catch (err) {
+      if (err.code === "auth/user-not-found") {
+        toast.error(`No user associated with this email`, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else if (err.code === "auth/wrong-password") {
+        toast.error(`incorrect Password`, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else if (err.code === "auth/invalid-email") {
+        toast.error("Enter all fields", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else if (err.code === "auth/missing-password") {
+        toast.error("Enter Password", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else if (err.code === "auth/invalid-login-credentials") {
+        toast.error("Wrong Password or Email", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      }
       setloading(false);
     }
   };
