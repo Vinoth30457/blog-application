@@ -15,22 +15,20 @@ function CreateBlog() {
   const navigate = useNavigate();
 
   // const [blogs, setBlogs] = useState('');
-  const [blogs, setBlogs] = useState({
-    title: "",
-    category: "",
-    content: "",
-    time: Timestamp.now(),
-  });
+  // const [blogs, setBlogs] = useState({
+  //   title: "",
+  //   category: "",
+  //   content: "",
+  //   time: Timestamp.now(),
+  // });
+  const [title, setTitle] = useState("");
+  const [category, setCategory] = useState("");
+  const [content, setContent] = useState("");
   const [thumbnail, setthumbnail] = useState();
 
   //* Add Post Function
   const addPost = async () => {
-    if (
-      blogs.title === "" ||
-      blogs.category === "" ||
-      blogs.content === "" ||
-      blogs.thumbnail === ""
-    ) {
+    if (title === "" || category === "" || content === "" || thumbnail === "") {
       toast.error("Please Fill All Fields");
     }
     // console.log(blogs.content)
@@ -46,7 +44,9 @@ function CreateBlog() {
         const productRef = collection(fireDb, "blogPost");
         try {
           addDoc(productRef, {
-            blogs,
+            title,
+            category,
+            content,
             thumbnail: url,
             time: Timestamp.now(),
             date: new Date().toLocaleString("en-US", {
@@ -151,8 +151,8 @@ function CreateBlog() {
               background: mode === "dark" ? "#dcdde1" : "rgb(226, 232, 240)",
             }}
             name="title"
-            onChange={(e) => setBlogs({ ...blogs, title: e.target.value })}
-            value={blogs.title}
+            onChange={(e) => setTitle(e.target.value)}
+            value={title}
           />
         </div>
 
@@ -169,8 +169,8 @@ function CreateBlog() {
               background: mode === "dark" ? "#dcdde1" : "rgb(226, 232, 240)",
             }}
             name="category"
-            onChange={(e) => setBlogs({ ...blogs, category: e.target.value })}
-            value={blogs.category}
+            onChange={(e) => setCategory(e.target.value)}
+            value={category}
           />
         </div>
 
@@ -178,9 +178,10 @@ function CreateBlog() {
         <Editor
           apiKey="e9ilc1v0n1hxhptu1qn4nxp8g9nvha6749mxf5uol7oeglp4"
           onEditorChange={(newValue, editor) => {
-            setBlogs({ ...blogs, content: newValue });
+            setContent(newValue);
             settext(editor.getContent({ format: "text" }));
           }}
+          value={content}
           onInit={(evt, editor) => {
             settext(editor.getContent({ format: "text" }));
           }}
@@ -280,7 +281,7 @@ function CreateBlog() {
 
                         [&>img]:rounded-lg
                         `}
-              dangerouslySetInnerHTML={createMarkup(blogs.content)}
+              dangerouslySetInnerHTML={createMarkup(content)}
             ></div>
           </div>
         </div>

@@ -4,12 +4,16 @@ import { useParams } from "react-router";
 import {
   Timestamp,
   addDoc,
+  arrayRemove,
+  arrayUnion,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   onSnapshot,
   orderBy,
   query,
+  updateDoc,
 } from "firebase/firestore";
 import { fireDb } from "../../firebase/FirebaseConfig";
 import Layout from "../../components/layout/Layout";
@@ -47,6 +51,7 @@ function BlogInfo() {
 
   useEffect(() => {
     getAllBlogs();
+    // console.log(userId.user.uid);
     window.scrollTo(0, 0);
   }, []);
 
@@ -84,12 +89,20 @@ function BlogInfo() {
       }
     }
   };
+  const deleteComments = async (id) => {
+    try {
+      await deleteDoc(doc(fireDb, `${params.id}/`, id));
+      toast.success("deleted successfully");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const [allComment, setAllComment] = useState([]);
 
   const getcomment = async () => {
     try {
       const q = query(
-        collection(fireDb, "blogPost/" + `${params.id}/` + "comment/"),
+        collection(fireDb, "blogPost/" + `${params.id}` + "/comment/"),
         orderBy("time")
       );
       const data = onSnapshot(q, (QuerySnapshot) => {
@@ -112,9 +125,46 @@ function BlogInfo() {
       });
     // console.log(userId);
   };
+  // const userId = JSON.parse(localStorage.getItem("admin"));
+  const comment = async () => {
+    const blogPostRef = doc(fireDb, "blogPost", params.id);
+
+    try {
+      await updateDoc(blogPostRef, {
+        comments: arrayUnion({
+          fullName,
+          commentText,
+          time: Timestamp.now(),
+          user: userId.user.uid,
+          date: new Date().toLocaleString("en-US", {
+            month: "short",
+            day: "2-digit",
+            year: "numeric",
+          }),
+        }),
+      });
+      toast.success("comment added");
+    } catch (err) {
+      // toast.error("comment error");
+      console.log(err);
+    }
+  };
+  const deleteComment = async (item, userID) => {
+    const userCartDocRef = doc(fireDb, "users", userID);
+
+    try {
+      await updateDoc(userCartDocRef, {
+        comments: arrayRemove({ ...item }),
+      });
+      toast.success("Article added to Bookmarks");
+    } catch (err) {
+      toast.error("Error adding article to Bookmarks");
+    }
+  };
 
   useEffect(() => {
     getcomment();
+    // console.log(getBlogs.comments);
     getName();
   }, []);
 
@@ -138,7 +188,7 @@ function BlogInfo() {
                   style={{ color: mode === "dark" ? "white" : "black" }}
                   className=" text-xl md:text-2xl lg:text-2xl font-semibold"
                 >
-                  {getBlogs?.blogs?.title}
+                  {getBlogs?.title}
                 </h1>
                 <p style={{ color: mode === "dark" ? "white" : "black" }}>
                   {getBlogs?.date}
@@ -225,9 +275,7 @@ function BlogInfo() {
 
                         [&>img]:rounded-lg
                         `}
-                  dangerouslySetInnerHTML={createMarkup(
-                    getBlogs?.blogs?.content
-                  )}
+                  dangerouslySetInnerHTML={createMarkup(getBlogs?.content)}
                 ></div>
               </div>
             </div>
@@ -241,6 +289,7 @@ function BlogInfo() {
           allComment={allComment}
           fullName={fullName}
           setFullName={setFullName}
+          // btn={deleteComments}
         />
       </section>
     </Layout>

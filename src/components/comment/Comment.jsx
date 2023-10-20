@@ -9,11 +9,11 @@ function Comment({
   allComment,
   fullName,
   setFullName,
+  btn,
 }) {
   const context = useContext(myContext);
   const { mode } = context;
 
-  console.log(allComment);
   return (
     <section className=" py-8 lg:py-16">
       <div className="max-w-2xl mx-auto px-4">
@@ -86,10 +86,14 @@ function Comment({
           }}
         >
           {allComment.map((item, index) => {
-            const { fullName, date, commentText } = item;
+            console.log(item);
+            const { fullName, date, commentText, id } = item;
             return (
               <>
-                <footer className="flex justify-between items-center mb-">
+                <footer
+                  className="flex justify-between items-center mb-"
+                  key={index}
+                >
                   <div className="flex items-center my-2 bg-white px-2 py-1 rounded-lg ">
                     <p
                       className="inline-flex items-center mr-3 text-lg  "
@@ -111,6 +115,9 @@ function Comment({
                 >
                   ↳ {commentText}
                 </p>
+                {/* <button type="button" onClick={() => btn(id)}>
+                  delete
+                </button> */}
               </>
             );
           })}

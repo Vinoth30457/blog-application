@@ -21,7 +21,7 @@ function BlogPostCard() {
             {getAllBlog.length > 0 ? (
               <>
                 {getAllBlog.slice(0, 3).map((item, index) => {
-                  const { thumbnail, date, id } = item;
+                  const { thumbnail, date, id, title, category } = item;
                   return (
                     <div
                       className="p-4 md:w-1/3"
@@ -69,7 +69,7 @@ function BlogPostCard() {
                                   : " rgb(30, 41, 59)",
                             }}
                           >
-                            Title: {item.blogs.title}
+                            Title: {title}
                           </h1>
 
                           {/* Blog Description  */}
@@ -82,7 +82,7 @@ function BlogPostCard() {
                                   : " rgb(30, 41, 59)",
                             }}
                           >
-                            Subject: {item.blogs.category}
+                            Subject: {category}
                           </h3>
                         </div>
                       </div>

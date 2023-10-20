@@ -30,7 +30,7 @@ function AllBlogs() {
             {getAllBlog.length > 0 ? (
               <>
                 {getAllBlog.map((item, index) => {
-                  const { thumbnail, id, date } = item;
+                  const { thumbnail, id, date, title, category } = item;
                   console.log(item);
                   return (
                     <div
@@ -83,7 +83,7 @@ function AllBlogs() {
                                   : " rgb(30, 41, 59)",
                             }}
                           >
-                            Title: {item.blogs.title}
+                            Title: {title}
                           </h1>
 
                           {/* Blog Description  */}
@@ -96,7 +96,7 @@ function AllBlogs() {
                                   : " rgb(30, 41, 59)",
                             }}
                           >
-                            Subject: {item.blogs.category}
+                            Subject: {category}
                           </h3>
                         </div>
                       </div>

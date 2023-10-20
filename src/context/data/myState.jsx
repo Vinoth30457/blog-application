@@ -86,6 +86,14 @@ function MyState(props) {
       console.log(error);
     }
   };
+  // const deleteComments = async (id) => {
+  //   try {
+  //     await deleteDoc(doc(fireDb, "comment", id));
+  //     toast.success("deleted successfully");
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
   const [editBlog, setEditBlog] = useState();
   const edithandle = (item) => {
     setEditBlog(item);

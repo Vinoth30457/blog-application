@@ -50,9 +50,7 @@ export default function SearchDialog() {
           {/* Blog Card  */}
           <div className="flex justify-center flex-wrap  sm:mx-auto sm:mb-2 -mx-2  mt-4 mb-2 ">
             {getAllBlog
-              .filter((obj) =>
-                obj.blogs.title.toLowerCase().includes(searchkey)
-              )
+              .filter((obj) => obj.title.toLowerCase().includes(searchkey))
               .map((item, index) => {
                 return (
                   <div key={index} className="p-2 sm:w-1/4 w-full ">
@@ -71,7 +69,7 @@ export default function SearchDialog() {
                       <p className="w-40 text-sm">{item.date}</p>
 
                       {/* Blog Title  */}
-                      <h1>{item.blogs.title}</h1>
+                      <h1>{item.title}</h1>
                     </div>
                   </div>
                 );
@@ -80,7 +78,7 @@ export default function SearchDialog() {
 
           {/* Heading  */}
           <div className=" text-center">
-            <h1 className=" text-gray-600">Powered By Devknus</h1>
+            <h1 className=" text-gray-600">Powered By Daily Blogs</h1>
           </div>
         </DialogBody>
       </Dialog>

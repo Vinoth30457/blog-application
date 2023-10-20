@@ -182,7 +182,8 @@ function Dashboard() {
                 {getAllBlog.length > 0 ? (
                   <>
                     {getAllBlog.map((item, index) => {
-                      const { thumbnail, date, id } = item;
+                      const { thumbnail, date, id, title, category, content } =
+                        item;
                       return (
                         <tbody key={index}>
                           <tr
@@ -225,7 +226,7 @@ function Dashboard() {
                               }}
                               className="px-6 py-4"
                             >
-                              {item.blogs.title}
+                              {title}
                             </td>
 
                             {/* Blog Category  */}
@@ -235,7 +236,7 @@ function Dashboard() {
                               }}
                               className="px-6 py-4"
                             >
-                              {item.blogs.category}
+                              {category}
                             </td>
 
                             {/* Blog Date  */}
@@ -255,14 +256,14 @@ function Dashboard() {
                               }}
                               className="px-6 py-4"
                             >
-                              {/* <Link to={"/updateblog"}>
+                              <Link to={"/updateblog"}>
                                 <button
                                   onClick={() => edithandle(item)}
                                   className=" px-4 py-1 rounded-lg text-white font-bold bg-green-500"
                                 >
                                   Edit
                                 </button>
-                              </Link> */}
+                              </Link>
                               <button
                                 onClick={() => deleteBlogs(id)}
                                 className=" px-4 py-1 rounded-lg text-white font-bold bg-red-500"
