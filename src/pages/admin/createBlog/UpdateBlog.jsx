@@ -77,7 +77,7 @@ function CreateBlog() {
                 color: mode === "dark" ? "white" : "black",
               }}
             >
-              Create blog
+              Update blog
             </Typography>
           </div>
         </div>
