@@ -48,6 +48,7 @@ function CreateBlog() {
             category,
             content,
             thumbnail: url,
+            comments: [],
             time: Timestamp.now(),
             date: new Date().toLocaleString("en-US", {
               month: "short",

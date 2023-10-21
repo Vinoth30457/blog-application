@@ -1,6 +1,7 @@
 import { Button } from "@material-tailwind/react";
 import { useContext } from "react";
 import myContext from "../../context/data/myContext";
+import { MdDeleteForever } from "react-icons/md";
 
 function Comment({
   addComment,
@@ -12,7 +13,8 @@ function Comment({
   btn,
 }) {
   const context = useContext(myContext);
-  const { mode } = context;
+  const { mode, user } = context;
+  const userId = JSON.parse(localStorage.getItem("admin"));
 
   return (
     <section className=" py-8 lg:py-16">
@@ -33,10 +35,14 @@ function Comment({
               className="text-lg lg:text-2xl font-medium"
               style={{ color: mode === "dark" ? "white" : "black" }}
             >
-              {fullName}
+              {user
+                .filter((obj) => obj.uid == userId.user.uid)
+                .map((item) => {
+                  setFullName(item.name);
+                  return item.name;
+                })}
             </h6>
           </div>
-
           {/* Text Area  */}
           <div
             className="py-2 px-4 mb-4 rounded-lg rounded-t-lg 
@@ -92,7 +98,7 @@ function Comment({
               <>
                 <footer
                   className="flex justify-between items-center mb-"
-                  key={index}
+                  key={id}
                 >
                   <div className="flex items-center my-2 bg-white px-2 py-1 rounded-lg ">
                     <p
@@ -110,14 +116,31 @@ function Comment({
                   </div>
                 </footer>
                 <p
-                  className="text-gray-500 dark:text-gray-400 text-md"
+                  className="text-gray-500 dark:text-gray-400 text-md flex gap-2"
                   style={{ color: mode === "dark" ? "white" : "black" }}
                 >
                   ↳ {commentText}
+                  {user
+                    .filter((obj) => obj.uid == userId.user.uid)
+                    .map((id) => {
+                      const { uid } = id;
+                      console.log(uid == item.user);
+                      if (item.user === uid) {
+                        return (
+                          <button
+                            key={uid}
+                            type="button"
+                            style={{ color: "red", fontSize: "1.25rem" }}
+                            onClick={() => btn(item)}
+                          >
+                            <MdDeleteForever />
+                          </button>
+                        );
+                      } else {
+                        <p>Nothing</p>;
+                      }
+                    })}
                 </p>
-                {/* <button type="button" onClick={() => btn(id)}>
-                  delete
-                </button> */}
               </>
             );
           })}

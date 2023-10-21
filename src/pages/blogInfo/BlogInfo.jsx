@@ -30,6 +30,7 @@ function BlogInfo() {
 
   //* getBlogs State
   const [getBlogs, setGetBlogs] = useState();
+  const [com, setCom] = useState([]);
 
   const getAllBlogs = async () => {
     setloading(true);
@@ -37,6 +38,7 @@ function BlogInfo() {
       const productTemp = await getDoc(doc(fireDb, "blogPost", params.id));
       if (productTemp.exists()) {
         setGetBlogs(productTemp.data());
+        setCom(productTemp.data().comments);
       } else {
         console.log("Document does not exist");
       }
@@ -51,9 +53,11 @@ function BlogInfo() {
 
   useEffect(() => {
     getAllBlogs();
+
     // console.log(userId.user.uid);
     window.scrollTo(0, 0);
   }, []);
+  console.log(com);
 
   //* Create markup function
   function createMarkup(c) {
@@ -129,34 +133,44 @@ function BlogInfo() {
   const comment = async () => {
     const blogPostRef = doc(fireDb, "blogPost", params.id);
 
-    try {
-      await updateDoc(blogPostRef, {
-        comments: arrayUnion({
-          fullName,
-          commentText,
-          time: Timestamp.now(),
-          user: userId.user.uid,
-          date: new Date().toLocaleString("en-US", {
-            month: "short",
-            day: "2-digit",
-            year: "numeric",
+    if (commentText === "") {
+      toast.error("Write a comment");
+    } else {
+      try {
+        await updateDoc(blogPostRef, {
+          comments: arrayUnion({
+            fullName,
+            commentText,
+            time: Timestamp.now(),
+            user: userId.user.uid,
+            date: new Date().toLocaleString("en-US", {
+              month: "short",
+              day: "2-digit",
+              year: "numeric",
+            }),
           }),
-        }),
-      });
-      toast.success("comment added");
-    } catch (err) {
-      // toast.error("comment error");
-      console.log(err);
+        });
+        // window.location.reload();
+        getAllBlogs();
+        setCommentText("");
+        // window.location.href = `/bloginfo/${params.id}`;
+        toast.success("comment added");
+      } catch (err) {
+        toast.error("comment error");
+        console.log(err);
+      }
     }
   };
-  const deleteComment = async (item, userID) => {
-    const userCartDocRef = doc(fireDb, "users", userID);
+  const deleteComment = async (item) => {
+    const userCartDocRef = doc(fireDb, "blogPost", params.id);
 
     try {
       await updateDoc(userCartDocRef, {
         comments: arrayRemove({ ...item }),
       });
-      toast.success("Article added to Bookmarks");
+      toast.error("comment deleted");
+      getAllBlogs();
+      // window.location.reload();
     } catch (err) {
       toast.error("Error adding article to Bookmarks");
     }
@@ -164,7 +178,6 @@ function BlogInfo() {
 
   useEffect(() => {
     getcomment();
-    // console.log(getBlogs.comments);
     getName();
   }, []);
 
@@ -283,13 +296,14 @@ function BlogInfo() {
         </div>
 
         <Comment
-          addComment={addComment}
+          // addComment={addComment}
+          addComment={comment}
           commentText={commentText}
           setcommentText={setCommentText}
-          allComment={allComment}
-          fullName={fullName}
+          // allComment={allComment}
+          allComment={com}
           setFullName={setFullName}
-          // btn={deleteComments}
+          btn={deleteComment}
         />
       </section>
     </Layout>
